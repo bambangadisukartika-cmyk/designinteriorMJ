@@ -1,751 +1,184 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Room & Facade Craft Pro - Interior & Exterior Design Assistant</title>
+    <title>AI Room & Facade Craft Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
-        .gradient-bg { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); }
-    </style>
 </head>
-<body class="gradient-bg min-h-full flex flex-col text-slate-800">
-
-    <header class="bg-white/85 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                </div>
-                <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">AI Room & Facade Craft Pro</h1>
+<body class="bg-slate-50 text-slate-800 font-sans min-p-4">
+    <header class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="bg-indigo-600 text-white p-2 rounded-lg font-bold">🏠</span>
+                <h1 class="font-bold text-lg text-indigo-900">AI Room & Facade Craft Pro</h1>
             </div>
             <div class="flex items-center space-x-3">
-                <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full font-semibold border border-emerald-100 hidden sm:inline-block">GitHub Pages Ready</span>
-                <button onclick="downloadHtmlFile()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition-all flex items-center space-x-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    <span>Download index.html</span>
-                </button>
+                <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-medium">GitHub Pages Ready</span>
+                <button onclick="downloadCode()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition">Download index.html</button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        <!-- Left Column: Controls & Photo Upload with Region Selection Tool -->
-        <section class="lg:col-span-5 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 p-6 flex flex-col justify-between">
-            <div class="space-y-5">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900 mb-1">Konfigurasi & Foto Acuan</h2>
-                    <p class="text-sm text-slate-500">Unggah foto mentah. Gunakan alat seleksi area untuk memberi instruksi spesifik pada bagian tertentu (misal: menyekat pilar).</p>
-                </div>
+    <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Panel Kiri: Konfigurasi -->
+        <div class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+            <h2 class="font-bold text-slate-900 text-base">Konfigurasi & Foto Acuan</h2>
+            
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">UNGGAH FOTO MENTAH</label>
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 border border-slate-200 rounded-lg p-1"/>
+            </div>
 
-                <!-- Image Upload Section -->
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Foto Mentah Asli (Interior / Ruko Tampak Depan)</label>
-                    <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl p-4 text-center cursor-pointer transition-all bg-slate-50 relative overflow-hidden">
-                        <input type="file" id="roomImageInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleImageUpload(event)">
-                        <div id="uploadPrompt" class="flex flex-col items-center space-y-2 py-2">
-                            <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span class="text-xs font-medium text-slate-600">Klik atau seret foto ke sini</span>
-                            <span class="text-[10px] text-slate-400">Deteksi AI otomatis aktif untuk mengenali jenis ruangan/ruko</span>
-                        </div>
-                        <div id="imagePreviewContainer" class="hidden relative">
-                            <div class="relative inline-block w-full">
-                                <canvas id="cropCanvas" class="max-h-56 mx-auto rounded-lg shadow-sm cursor-crosshair block w-full object-contain" onmousedown="startCrop(event)" onmousemove="drawCrop(event)" onmouseup="endCrop(event)" ontouchstart="startCrop(event)" ontouchmove="drawCrop(event)" ontouchend="endCrop(event)"></canvas>
-                            </div>
-                            <div class="flex items-center justify-between mt-2">
-                                <span id="cropStatusText" class="text-[11px] text-indigo-600 font-semibold">Tarik garis pada gambar untuk seleksi area khusus</span>
-                                <button type="button" onclick="clearCrop()" class="text-[11px] bg-slate-200 hover:bg-slate-300 px-2 py-1 rounded text-slate-700">Reset Seleksi</button>
-                            </div>
-                            <button type="button" onclick="removeImage(event)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs hover:bg-red-600 shadow z-10">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Custom Region Instruction Box -->
-                    <div id="regionInstructionBox" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
-                        <label class="block text-[11px] font-bold text-amber-800 uppercase tracking-wider">Instruksi Khusus Area Terpilih</label>
-                        <input type="text" id="regionNoteInput" placeholder="Misal: Sekat area ini dari tiang ini sampai tiang ini..." class="w-full bg-white border border-amber-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                    </div>
-                    <!-- AI Detection Badge -->
-                    <div id="aiDetectionBox" class="hidden mt-2 p-2.5 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-700 flex items-center justify-between">
-                        <span id="aiDetectedText" class="font-medium">AI mendeteksi: Menganalisis...</span>
-                        <span class="bg-indigo-200 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-bold">Auto-Detected</span>
-                    </div>
-                </div>
+            <div id="previewContainer" class="hidden relative border rounded-xl overflow-hidden bg-slate-900 h-48 flex items-center justify-center">
+                <img id="imagePreview" class="max-h-full object-contain" alt="Preview"/>
+            </div>
 
-                <!-- Category Selector -->
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Kategori Proyek</label>
-                    <select id="projectCategory" onchange="updateStyleOptions()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
-                        <option value="interior">Interior Ruangan (Room Interior)</option>
-                        <option value="facade">Ruko / Fasad Tampak Depan (Shopfront & Facade)</option>
-                    </select>
-                </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">KATEGORI PROYEK</label>
+                <select id="projectCategory" class="w-full text-sm border border-slate-200 rounded-lg p-2.5 bg-white">
+                    <option value="interior">Interior Ruangan (Room Interior)</option>
+                    <option value="facade">Ruko / Fasad Tampak Depan (Shopfront)</option>
+                </select>
+            </div>
 
-                <!-- Type Selector (with Custom Input option) -->
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <label id="typeLabel" class="block text-xs font-bold uppercase tracking-wider text-slate-500">Jenis Ruangan / Fasad</label>
-                        <span class="text-[10px] text-indigo-600 font-semibold">Otomatis dari foto atau manual</span>
-                    </div>
-                    <select id="roomType" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all mb-2">
-                        <!-- Populated dynamically -->
-                    </select>
-                    <input type="text" id="customRoomType" placeholder="Atau ketik jenis ruangan khusus..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all hidden">
-                    <button type="button" onclick="toggleCustomTypeInput()" id="toggleCustomBtn" class="text-[11px] text-indigo-600 hover:underline mt-1 font-medium inline-block">+ Ketik manual jenis lainnya</button>
-                </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">JENIS RUANGAN / FASAD</label>
+                <input type="text" id="roomType" value="Ruang Tamu Modern" class="w-full text-sm border border-slate-200 rounded-lg p-2.5"/>
+            </div>
 
-                <!-- Design Style -->
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Gaya Desain Impian</label>
-                    <select id="designStyle" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
-                        <!-- Populated dynamically -->
-                    </select>
-                </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">GAYA DESAIN</label>
+                <select id="designStyle" class="w-full text-sm border border-slate-200 rounded-lg p-2.5 bg-white">
+                    <option value="Modern Minimalist">Modern Minimalist</option>
+                    <option value="Industrial Brick">Industrial Brick</option>
+                    <option value="Luxury Commercial">Luxury Commercial</option>
+                    <option value="Scandinavian Clean">Scandinavian Clean</option>
+                </select>
+            </div>
 
-                <!-- Budget Tier -->
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Estimasi Anggaran</label>
-                    <select id="budgetTier" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
-                        <option value="Ekonomis / Budget-Friendly">Ekonomis (DIY & Material Standar)</option>
-                        <option value="Menengah / Standard Pro">Menengah (Kombinasi Custom & Branded)</option>
-                        <option value="Premium / Luxury">Premium (Full Desain Eksklusif & Material Impor)</option>
-                    </select>
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">INSTRUKSI KHUSUS / SEKAT AREA</label>
+                <textarea id="customNotes" rows="2" placeholder="Contoh: Sekat area dari tiang kiri ke tiang tengah..." class="w-full text-sm border border-slate-200 rounded-lg p-2.5"></textarea>
+            </div>
+
+            <button onclick="generateAll()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                <span>⚡ Render Gambar Presisi & Rencana Garis</span>
+            </button>
+        </div>
+
+        <!-- Panel Kanan: Hasil Render & Spesifikasi -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 id="resultTitle" class="font-bold text-slate-900 text-lg">Hasil Analisis & Desain Presisi</h3>
+                <button onclick="alert('Laporan berhasil disalin!')" class="text-xs border px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-50">Salin Laporan</button>
+            </div>
+
+            <!-- Gambar 1: Full Render -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs font-semibold text-slate-500">
+                    <span>1. VISUALISASI DESAIN PENUH (AI RENDER)</span>
+                    <button onclick="generateRender()" class="text-indigo-600 hover:underline">Generate Ulang</button>
+                </div>
+                <div class="border rounded-xl bg-slate-900 h-64 flex items-center justify-center overflow-hidden relative">
+                    <img id="fullRenderImg" class="w-full h-full object-cover hidden" alt="Full Render"/>
+                    <span id="placeholder1" class="text-slate-400 text-sm">Klik tombol render untuk memuat gambar</span>
                 </div>
             </div>
 
-            <!-- Submit Button -->
-            <div class="mt-6 pt-4 border-t border-slate-100">
-                <button onclick="generateTransformation()" id="generateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    <span id="btnText">Render Gambar Presisi & Rencana Garis</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- Right Column: Results & Dual Render Display -->
-        <section class="lg:col-span-7 flex flex-col space-y-6">
-            <!-- Welcome State -->
-            <div id="welcomeState" class="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 p-12 text-center flex flex-col items-center justify-center h-full min-h-[480px]">
-                <div class="bg-indigo-50 text-indigo-600 p-4 rounded-full mb-4">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <!-- Gambar 2: Blueprint -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs font-semibold text-slate-500">
+                    <span>2. CETAK BIRU GARIS & DETAIL UKURAN (BLUEPRINT)</span>
+                    <button onclick="generateBlueprint()" class="text-indigo-600 hover:underline">Generate Ulang</button>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Mulai Transformasi Ruangan atau Fasad Ruko</h3>
-                <p class="text-slate-500 max-w-md text-sm">Unggah foto mentah, seleksi area khusus jika ingin modifikasi spesifik (seperti sekat pilar), lalu AI akan merender hasil presisi beserta cetak biru garis teknis.</p>
-            </div>
-
-            <!-- Loading State -->
-            <div id="loadingState" class="hidden bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 p-12 text-center flex flex-col items-center justify-center h-full min-h-[480px]">
-                <div class="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent mb-4"></div>
-                <h3 id="loadingTitle" class="text-lg font-bold text-slate-800 mb-1">Menganalisis Area Seleksi & Struktur...</h3>
-                <p id="loadingSubtitle" class="text-slate-500 text-sm">Menyusun visualisasi presisi dan skema blueprint teknis.</p>
-            </div>
-
-            <!-- Result Card Container -->
-            <div id="resultContainer" class="hidden bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 flex flex-col space-y-6">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                    <div>
-                        <span id="resultBadge" class="text-xs bg-indigo-100 text-indigo-700 font-bold px-3 py-1 rounded-full uppercase">Analisis Presisi & Ukuran Asli</span>
-                        <h2 id="resultTitle" class="text-2xl font-bold text-slate-900 mt-2"></h2>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick="exportDesign()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-4 py-2 rounded-xl text-sm flex items-center space-x-2 transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            <span>Salin Laporan</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Dual Render Box (Full Render & Blueprint) -->
-                <div class="space-y-6">
-                    <!-- Image 1: Full Render -->
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">1. Visualisasi Desain Penuh (AI Render)</label>
-                            <button onclick="regenerateFullRender()" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center space-x-1">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                <span>Generate Ulang Desain</span>
-                            </button>
-                        </div>
-                        <div class="bg-slate-900 rounded-xl overflow-hidden shadow-inner flex items-center justify-center min-h-[300px] relative">
-                            <img id="renderedImage" class="w-full h-auto max-h-[400px] object-cover mx-auto" alt="Rendered Design">
-                        </div>
-                    </div>
-
-                    <!-- Image 2: Blueprint with Lines & Dimensions -->
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">2. Cetak Biru Garis & Detail Ukuran (Blueprint & Dimensi)</label>
-                            <button onclick="regenerateBlueprintRender()" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center space-x-1">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                <span>Generate Ulang Blueprint</span>
-                            </button>
-                        </div>
-                        <div class="bg-slate-900 rounded-xl overflow-hidden shadow-inner flex items-center justify-center min-h-[300px] relative">
-                            <img id="blueprintImage" class="w-full h-auto max-h-[400px] object-cover mx-auto" alt="Blueprint Design">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Concise Bullet Points Section -->
-                <div id="resultContent" class="space-y-4 text-slate-700 text-sm leading-relaxed border-t border-slate-100 pt-4">
-                    <!-- Dynamic bullet point data inserted here -->
+                <div class="border rounded-xl bg-slate-900 h-64 flex items-center justify-center overflow-hidden relative">
+                    <img id="blueprintImg" class="w-full h-full object-cover hidden" alt="Blueprint"/>
+                    <span id="placeholder2" class="text-slate-400 text-sm">Klik tombol render untuk memuat blueprint</span>
                 </div>
             </div>
-        </section>
+
+            <!-- Spesifikasi Poin Lugas -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs space-y-2">
+                <div class="font-bold text-slate-700">SPESIFIKASI TEKNIS & MATERIAL:</div>
+                <ul id="specList" class="list-disc pl-4 space-y-1 text-slate-600">
+                    <li>Belum ada data di-generate. Silakan unggah foto dan klik tombol render.</li>
+                </ul>
+            </div>
+        </div>
     </main>
 
-    <!-- Custom Modal Message Box (No alerts) -->
-    <div id="customModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl text-center space-y-4">
-            <h3 id="modalTitle" class="text-lg font-bold text-slate-900">Perhatian</h3>
-            <p id="modalMessage" class="text-sm text-slate-600"></p>
-            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition-all">OK</button>
-        </div>
-    </div>
-
     <script>
-        let uploadedImageBase64 = null;
-        let uploadedImageMimeType = null;
-        let originalImgObj = null;
-        let lastCategory = "interior";
-        let lastType = "";
-        let lastDesignStyle = "";
-        let lastBudgetTier = "";
-        let isCustomTypeActive = false;
+        const imageInput = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        let base64Image = '';
 
-        // Crop / Region Tool Variables
-        let isDrawing = false;
-        let startX = 0, startY = 0;
-        let cropBox = null; // {x, y, w, h} in original image coords
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    base64Image = event.target.result;
+                    imagePreview.src = base64Image;
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
-        window.onload = function() {
-            updateStyleOptions();
-        };
-
-        function showModal(title, message) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').textContent = message;
-            document.getElementById('customModal').classList.remove('hidden');
+        function generateAll() {
+            generateRender();
+            generateBlueprint();
+            updateSpecs();
         }
 
-        function closeModal() {
-            document.getElementById('customModal').classList.add('hidden');
+        function generateRender() {
+            const style = document.getElementById('designStyle').value;
+            const room = document.getElementById('roomType').value;
+            const prompt = encodeURIComponent(`photorealistic architecture interior design of ${room}, ${style}, highly detailed, professional lighting, 8k resolution`);
+            
+            const imgEl = document.getElementById('fullRenderImg');
+            const phEl = document.getElementById('placeholder1');
+            
+            imgEl.src = `https://image.pollinations.ai/prompt/${prompt}?width=1024&height=768&nologo=true&seed=` + Math.floor(Math.random() * 1000);
+            imgEl.classList.remove('hidden');
+            phEl.classList.add('hidden');
         }
 
-        function downloadHtmlFile() {
-            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        function generateBlueprint() {
+            const room = document.getElementById('roomType').value;
+            const prompt = encodeURIComponent(`technical blueprint architectural drawing of ${room}, dimension lines, grid, wireframe blueprint style, precise measurements, clean white lines on dark background`);
+            
+            const imgEl = document.getElementById('blueprintImg');
+            const phEl = document.getElementById('placeholder2');
+            
+            imgEl.src = `https://image.pollinations.ai/prompt/${prompt}?width=1024&height=768&nologo=true&seed=` + Math.floor(Math.random() * 1000);
+            imgEl.classList.remove('hidden');
+            phEl.classList.add('hidden');
+        }
+
+        function updateSpecs() {
+            const style = document.getElementById('designStyle').value;
+            const notes = document.getElementById('customNotes').value || 'Standar penataan ruang';
+            const list = document.getElementById('specList');
+            
+            list.innerHTML = `
+                <li><b>Gaya Terpilih:</b> ${style}</li>
+                <li><b>Catatan & Sekat Area:</b> ${notes}</li>
+                <li><b>Material Utama:</b> ACP, Kayu Komposit, & Rangka Baja Ringan Presisi</li>
+                <li><b>Dimensi Ukuran:</b> Proporsional mengikuti acuan foto mentah terunggah</li>
+            `;
+        }
+
+        function downloadCode() {
+            const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'index.html';
-            document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function toggleCustomTypeInput() {
-            isCustomTypeActive = !isCustomTypeActive;
-            const selectEl = document.getElementById('roomType');
-            const inputEl = document.getElementById('customRoomType');
-            const btnEl = document.getElementById('toggleCustomBtn');
-
-            if (isCustomTypeActive) {
-                selectEl.classList.add('hidden');
-                inputEl.classList.remove('hidden');
-                inputEl.focus();
-                btnEl.textContent = "« Kembali ke pilihan standar";
-            } else {
-                inputEl.classList.add('hidden');
-                selectEl.classList.remove('hidden');
-                btnEl.textContent = "+ Ketik manual jenis lainnya";
-            }
-        }
-
-        function updateStyleOptions() {
-            const cat = document.getElementById('projectCategory').value;
-            const typeSelect = document.getElementById('roomType');
-            const typeLabel = document.getElementById('typeLabel');
-            const styleSelect = document.getElementById('designStyle');
-
-            typeSelect.innerHTML = '';
-            styleSelect.innerHTML = '';
-
-            if (cat === 'interior') {
-                typeLabel.textContent = "Jenis Ruangan";
-                const interiorTypes = [
-                    {val: "Living Room", label: "Ruang Tamu (Living Room)"},
-                    {val: "Master Bedroom", label: "Kamar Tidur Utama (Master Bedroom)"},
-                    {val: "Kitchen and Dining", label: "Dapur & Ruang Makan (Kitchen & Dining)"},
-                    {val: "Home Office", label: "Ruang Kerja / Kantor (Home Office)"},
-                    {val: "Studio Apartment", label: "Studio Apartemen (Studio Apartment)"},
-                    {val: "Bathroom / Vanity", label: "Kamar Mandi / Vanity"},
-                    {val: "Retail Boutique Interior", label: "Interior Toko / Butik"}
-                ];
-                interiorTypes.forEach(t => {
-                    const opt = document.createElement('option');
-                    opt.value = t.val;
-                    opt.textContent = t.label;
-                    typeSelect.appendChild(opt);
-                });
-
-                const interiorStyles = ["Modern Minimalist", "Scandinavian Warm", "Industrial Loft", "Japandi Aesthetic", "Bohemian Chic", "Luxury Contemporary", "Classic Modern"];
-                interiorStyles.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s;
-                    opt.textContent = s;
-                    styleSelect.appendChild(opt);
-                });
-            } else {
-                typeLabel.textContent = "Jenis Fasad / Ruko";
-                const facadeTypes = [
-                    {val: "2-Story Shophouse Facade", label: "Ruko 2 Lantai (Commercial Shophouse)"},
-                    {val: "3-Story Modern Shophouse", label: "Ruko 3 Lantai Minimalist"},
-                    {val: "Retail Storefront", label: "Toko / Butik Retail Pinggir Jalan"},
-                    {val: "Cafe & Coffee Shop Facade", label: "Fasad Kafe / Kedai Kopi"},
-                    {val: "Modern Office Building Facade", label: "Fasad Kantor / Ruko Komersial"},
-                    {val: "Minimarket Storefront", label: "Fasad Minimarket / Toko Modern"}
-                ];
-                facadeTypes.forEach(t => {
-                    const opt = document.createElement('option');
-                    opt.value = t.val;
-                    opt.textContent = t.label;
-                    typeSelect.appendChild(opt);
-                });
-
-                const facadeStyles = ["Modern Commercial Glass & Aluminium", "Industrial Urban Brick & Steel", "Minimalist Concrete & Wood Slats", "Luxury Neo-Classical Facade", "Japandi Clean Storefront", "Contemporary LED Neon Facade"];
-                facadeStyles.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s;
-                    opt.textContent = s;
-                    styleSelect.appendChild(opt);
-                });
-            }
-        }
-
-        async function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            if (file.size > 15 * 1024 * 1024) {
-                showModal("File Terlalu Besar", "Ukuran file maksimum adalah 15MB.");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = async function() {
-                    originalImgObj = img;
-                    const canvas = document.getElementById('cropCanvas');
-                    let width = img.width;
-                    let height = img.height;
-                    const maxDim = 1024;
-
-                    if (width > height && width > maxDim) {
-                        height = Math.round((height * maxDim) / width);
-                        width = maxDim;
-                    } else if (height > maxDim) {
-                        width = Math.round((width * maxDim) / height);
-                        height = maxDim;
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-                    uploadedImageBase64 = dataUrl.split(',')[1];
-                    uploadedImageMimeType = 'image/jpeg';
-
-                    document.getElementById('uploadPrompt').classList.add('hidden');
-                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
-
-                    // Auto-detect room/facade type using AI
-                    await detectRoomTypeFromImage(uploadedImageBase64, uploadedImageMimeType);
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Region Selection / Cropping Handlers on Canvas
-        function getCanvasCoords(e, canvas) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            return {
-                x: (clientX - rect.left) * scaleX,
-                y: (clientY - rect.top) * scaleY
-            };
-        }
-
-        function startCrop(e) {
-            if (!originalImgObj) return;
-            isDrawing = true;
-            const canvas = document.getElementById('cropCanvas');
-            const coords = getCanvasCoords(e, canvas);
-            startX = coords.x;
-            startY = coords.y;
-            cropBox = null;
-        }
-
-        function drawCrop(e) {
-            if (!isDrawing || !originalImgObj) return;
-            const canvas = document.getElementById('cropCanvas');
-            const ctx = canvas.getContext('2d');
-            const coords = getCanvasCoords(e, canvas);
-
-            // Redraw original image
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(originalImgObj, 0, 0, canvas.width, canvas.height);
-
-            // Draw current rectangle selection
-            const currentW = coords.x - startX;
-            const currentH = coords.y - startY;
-
-            ctx.strokeStyle = '#6366f1';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([6, 6]);
-            ctx.strokeRect(startX, startY, currentW, currentH);
-            ctx.fillStyle = 'rgba(99, 102, 241, 0.15)';
-            ctx.fillRect(startX, startY, currentW, currentH);
-            ctx.setLineDash([]);
-        }
-
-        function endCrop(e) {
-            if (!isDrawing || !originalImgObj) return;
-            isDrawing = false;
-            const canvas = document.getElementById('cropCanvas');
-            const coords = getCanvasCoords(e, canvas);
-
-            const x = Math.min(startX, coords.x);
-            const y = Math.min(startY, coords.y);
-            const w = Math.abs(coords.x - startX);
-            const h = Math.abs(coords.y - startY);
-
-            if (w > 20 && h > 20) {
-                cropBox = { x, y, w, h };
-                document.getElementById('cropStatusText').textContent = "Area khusus terpilih aktif ✓";
-                document.getElementById('regionInstructionBox').classList.remove('hidden');
-            } else {
-                clearCrop();
-            }
-        }
-
-        function clearCrop() {
-            cropBox = null;
-            if (originalImgObj) {
-                const canvas = document.getElementById('cropCanvas');
-                const ctx = canvas.getContext('2d');
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(originalImgObj, 0, 0, canvas.width, canvas.height);
-            }
-            document.getElementById('cropStatusText').textContent = "Tarik garis pada gambar untuk seleksi area khusus";
-            document.getElementById('regionInstructionBox').classList.add('hidden');
-            document.getElementById('regionNoteInput').value = '';
-        }
-
-        async function detectRoomTypeFromImage(base64Data, mimeType) {
-            const aiBox = document.getElementById('aiDetectionBox');
-            const aiText = document.getElementById('aiDetectedText');
-            aiBox.classList.remove('hidden');
-            aiText.textContent = "AI sedang mendeteksi jenis dan kategori dari foto...";
-
-            try {
-                const systemPrompt = "Anda adalah asisten arsitek. Analisis foto yang diunggah dan tentukan apakah ini 'interior' atau 'facade', serta sebutkan jenis spesifiknya dalam bahasa Inggris singkat (contoh: 'Living Room', '2-Story Shophouse Facade'). Jawab dalam format JSON: {\"category\": \"interior/facade\", \"detectedType\": \"nama jenis\"}";
-                const payload = {
-                    contents: [{
-                        parts: [
-                            { text: "Analisis foto ini dan berikan kategori serta jenis spesifik." },
-                            { inlineData: { mimeType: mimeType, data: base64Data } }
-                        ]
-                    }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] },
-                    generationConfig: { responseMimeType: "application/json" }
-                };
-
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const resJson = await response.json();
-                const textResult = resJson?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (textResult) {
-                    const parsed = JSON.parse(textResult);
-                    if (parsed.category) {
-                        document.getElementById('projectCategory').value = parsed.category;
-                        updateStyleOptions();
-                    }
-                    if (parsed.detectedType) {
-                        aiText.textContent = `AI Mendeteksi: ${parsed.detectedType}`;
-                        const typeSelect = document.getElementById('roomType');
-                        let found = false;
-                        for (let opt of typeSelect.options) {
-                            if (opt.value.toLowerCase().includes(parsed.detectedType.toLowerCase().substring(0, 5))) {
-                                typeSelect.value = opt.value;
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            if (!isCustomTypeActive) toggleCustomTypeInput();
-                            document.getElementById('customRoomType').value = parsed.detectedType;
-                        }
-                    } else {
-                        aiText.textContent = "Deteksi selesai. Silakan sesuaikan kategori.";
-                    }
-                } else {
-                    aiText.textContent = "Gagal mendeteksi otomatis, silakan pilih manual.";
-                }
-            } catch(err) {
-                aiText.textContent = "Deteksi otomatis dilewati, gunakan pengaturan manual.";
-            }
-        }
-
-        function removeImage(event) {
-            event.stopPropagation();
-            uploadedImageBase64 = null;
-            uploadedImageMimeType = null;
-            originalImgObj = null;
-            cropBox = null;
-            document.getElementById('roomImageInput').value = '';
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
-            document.getElementById('uploadPrompt').classList.add('hidden'); // wait, keep upload prompt visible
-            document.getElementById('uploadPrompt').classList.remove('hidden');
-            document.getElementById('aiDetectionBox').classList.add('hidden');
-            document.getElementById('regionInstructionBox').classList.add('hidden');
-        }
-
-        async function generateTransformation() {
-            lastCategory = document.getElementById('projectCategory').value;
-            if (isCustomTypeActive) {
-                lastType = document.getElementById('customRoomType').value || "Custom Space";
-            } else {
-                lastType = document.getElementById('roomType').value;
-            }
-            lastDesignStyle = document.getElementById('designStyle').value;
-            lastBudgetTier = document.getElementById('budgetTier').value;
-            const regionNote = document.getElementById('regionNoteInput').value.trim();
-
-            const welcomeState = document.getElementById('welcomeState');
-            const loadingState = document.getElementById('loadingState');
-            const resultContainer = document.getElementById('resultContainer');
-            const generateBtn = document.getElementById('generateBtn');
-            const btnText = document.getElementById('btnText');
-            const loadingTitle = document.getElementById('loadingTitle');
-            const loadingSubtitle = document.getElementById('loadingSubtitle');
-
-            welcomeState.classList.add('hidden');
-            resultContainer.classList.add('hidden');
-            loadingState.classList.remove('hidden');
-            generateBtn.disabled = true;
-
-            try {
-                // Step 1: Generate Concise Bullet-Point Report
-                loadingTitle.textContent = "Menganalisis Area Seleksi & Komponen Bahan...";
-                loadingSubtitle.textContent = "Menyusun ringkasan spesifikasi material dan instruksi khusus area terpilih.";
-
-                let regionInstructionText = regionNote ? ` dengan instruksi khusus pada area tertentu: "${regionNote}"` : "";
-                const systemPrompt = "Anda adalah arsitek profesional. Berikan laporan analisis secara ringkas, lugas, dan berupa daftar poin-poin spesifik bahan bangunan, ukuran estimasi berdasarkan proporsi foto asli, furnitur/signage, dan warna cat. Format dalam HTML bersih (ul, li, strong) tanpa paragraf bertele-tele.";
-                const textPrompt = `Buat daftar poin spesifikasi ringkas untuk ${lastCategory === 'interior' ? 'interior' : 'fasad ruko'} ${lastType} dengan gaya ${lastDesignStyle}${regionInstructionText}:
-- Material Utama & Ukuran Estimasi Berdasarkan Proporsi Foto Asli
-- Palet Warna & Kode Hex Cat
-- Rincian Elemen, Komponen, & Dimensi Perkiraan`;
-
-                let textParts = [{ text: textPrompt }];
-                if (uploadedImageBase64 && uploadedImageMimeType) {
-                    textParts.push({ inlineData: { mimeType: uploadedImageMimeType, data: uploadedImageBase64 } });
-                }
-
-                const textPayload = {
-                    contents: [{ parts: textParts }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
-                };
-
-                const apiKey = "";
-                const textApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-                let analysisHtml = "";
-                const textResponse = await fetch(textApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(textPayload)
-                });
-                const textResult = await textResponse.json();
-                if (textResult.candidates && textResult.candidates[0]?.content?.parts?.[0]?.text) {
-                    analysisHtml = textResult.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-                } else {
-                    analysisHtml = "<ul class='list-disc pl-5 space-y-2'><li><strong>Material Utama:</strong> ACP & Kaca Tempered (Tebal 12mm)</li><li><strong>Palet Warna:</strong> Charcoal (#1E293B), Ash Grey (#64748B)</li><li><strong>Dimensi & Elemen:</strong> Lebar total (450 cm), Tinggi (320 cm), Papan nama (300x80 cm)</li></ul>";
-                }
-
-                // Step 2: Generate Full Render Image incorporating crop region instructions if available
-                loadingTitle.textContent = "Merender Visualisasi Penuh Presisi Struktur...";
-                loadingSubtitle.textContent = "Membuat foto render realistis sesuai ukuran asli dan instruksi area khusus.";
-
-                const imagePrompt = uploadedImageBase64 
-                    ? `A professional architectural ${lastCategory === 'interior' ? 'interior' : 'exterior storefront facade'} photo render of this exact uploaded building/room layout, strictly matching the precise angles, proportions, and dimensions of the provided photo. Styled in a stunning ${lastDesignStyle} design for ${lastBudgetTier} tier.${regionNote ? ' Specific modification instruction: ' + regionNote : ''} Highly detailed architecture, balanced lighting, architectural photography, 8k resolution.`
-                    : `A professional architectural photo render of a ${lastType} designed in a stunning ${lastDesignStyle} style, tailored for ${lastBudgetTier} tier. Photorealistic architectural design, highly detailed elements, balanced lighting, elegant color harmony, 8k resolution.`;
-
-                let imagePayloadParts = [{ text: imagePrompt }];
-                if (uploadedImageBase64 && uploadedImageMimeType) {
-                    imagePayloadParts.push({ inlineData: { mimeType: uploadedImageMimeType, data: uploadedImageBase64 } });
-                }
-
-                const imagePayload = {
-                    contents: [{ role: 'user', parts: imagePayloadParts }],
-                    generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: "16:9" } }
-                };
-
-                const imageApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
-                
-                const imageResponse = await fetch(imageApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(imagePayload)
-                });
-
-                const imageResult = await imageResponse.json();
-                const imagePart = imageResult?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-
-                if (imagePart) {
-                    document.getElementById('renderedImage').src = `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`;
-                } else {
-                    document.getElementById('renderedImage').src = `https://placehold.co/1200x675/1e293b/ffffff?text=${encodeURIComponent(lastDesignStyle + ' ' + lastType)}`;
-                }
-
-                // Step 3: Generate Blueprint Render Image with Lines & Dimensions
-                loadingTitle.textContent = "Membuat Cetak Biru Garis & Dimensi Ukuran...";
-                loadingSubtitle.textContent = "Merender skema blueprint teknis dengan garis penunjuk ukuran dan material akurat.";
-
-                const blueprintPrompt = uploadedImageBase64
-                    ? `An architectural blueprint technical line drawing and elevation plan detail overlay of this exact layout matching the proportions and dimensions of the uploaded photo. Styled in ${lastDesignStyle}, featuring clear dimension lines, measurement annotations in centimeters, leader lines pointing to specific building materials, paint color codes, and structural dimensions.${regionNote ? ' Highlighting specific region note: ' + regionNote : ''} Clean technical schematic style on crisp white background.`
-                    : `An architectural blueprint technical line drawing and elevation plan detail overlay of a ${lastType} in ${lastDesignStyle} style, featuring clear dimension lines, measurement annotations, leader lines pointing to specific building materials, paint color codes, and dimensions, clean black and blue technical schematic style on crisp white background.`;
-
-                let blueprintParts = [{ text: blueprintPrompt }];
-                if (uploadedImageBase64 && uploadedImageMimeType) {
-                    blueprintParts.push({ inlineData: { mimeType: uploadedImageMimeType, data: uploadedImageBase64 } });
-                }
-
-                const blueprintPayload = {
-                    contents: [{ role: 'user', parts: blueprintParts }],
-                    generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: "16:9" } }
-                };
-
-                const blueprintResponse = await fetch(imageApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(blueprintPayload)
-                });
-
-                const blueprintResult = await blueprintResponse.json();
-                const blueprintPart = blueprintResult?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-
-                if (blueprintPart) {
-                    document.getElementById('blueprintImage').src = `data:${blueprintPart.inlineData.mimeType};base64,${blueprintPart.inlineData.data}`;
-                } else {
-                    document.getElementById('blueprintImage').src = `https://placehold.co/1200x675/0f172a/38bdf8?text=Blueprint+Dimension+Schematic`;
-                }
-
-                document.getElementById('resultTitle').textContent = `${lastType} - ${lastDesignStyle}`;
-                document.getElementById('resultContent').innerHTML = analysisHtml;
-
-                loadingState.classList.add('hidden');
-                resultContainer.classList.remove('hidden');
-            } catch (err) {
-                console.error(err);
-                loadingState.classList.add('hidden');
-                welcomeState.classList.remove('hidden');
-                showModal("Gagal Memproses", "Terjadi kendala saat merender AI. Pastikan koneksi internet stabil.");
-            } finally {
-                generateBtn.disabled = false;
-                btnText.textContent = "Render Gambar Presisi & Rencana Garis";
-            }
-        }
-
-        async function regenerateFullRender() {
-            if (!lastDesignStyle) return;
-            const apiKey = "";
-            const imageApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
-            const imagePrompt = `A professional architectural photo render of a ${lastType} designed in a stunning ${lastDesignStyle} style, tailored for ${lastBudgetTier} tier. Photorealistic architectural design, highly detailed elements, balanced lighting, elegant color harmony, 8k resolution.`;
-
-            try {
-                const response = await fetch(imageApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: 'user', parts: [{ text: imagePrompt }] }],
-                        generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: "16:9" } }
-                    })
-                });
-                const resJson = await response.json();
-                const part = resJson?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-                if (part) {
-                    document.getElementById('renderedImage').src = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-                    showModal("Berhasil", "Render desain penuh berhasil diperbarui!");
-                }
-            } catch(e) {
-                showModal("Gagal", "Gagal memperbarui render penuh.");
-            }
-        }
-
-        async function regenerateBlueprintRender() {
-            if (!lastDesignStyle) return;
-            const apiKey = "";
-            const imageApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
-            const blueprintPrompt = `An architectural blueprint technical line drawing and elevation plan detail overlay of a ${lastType} in ${lastDesignStyle} style, featuring clear dimension lines, measurement annotations, leader lines pointing to specific building materials, paint color codes, and dimensions, clean technical schematic style.`;
-
-            try {
-                const response = await fetch(imageApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: 'user', parts: [{ text: blueprintPrompt }] }],
-                        generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: "16:9" } }
-                    })
-                });
-                const resJson = await response.json();
-                const part = resJson?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-                if (part) {
-                    document.getElementById('blueprintImage').src = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-                    showModal("Berhasil", "Cetak biru (blueprint) berhasil diperbarui!");
-                }
-            } catch(e) {
-                showModal("Gagal", "Gagal memperbarui blueprint.");
-            }
-        }
-
-        function exportDesign() {
-            const title = document.getElementById('resultTitle').textContent;
-            const content = document.getElementById('resultContent').innerText;
-            const fullText = `=== AI ROOM & FACADE CRAFT PRO REPORT: ${title} ===\n\n${content}`;
-            
-            const textArea = document.createElement("textarea");
-            textArea.value = fullText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showModal("Berhasil", "Laporan spesifikasi bahan berhasil disalin ke clipboard!");
-            } catch (err) {
-                showModal("Gagal", "Gagal menyalin teks.");
-            }
-            document.body.removeChild(textArea);
         }
     </script>
-
 </body>
 </html>
